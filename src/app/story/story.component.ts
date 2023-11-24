@@ -8,12 +8,14 @@ import { HomepageService } from '../services/homepage.service';
 })
 export class StoryComponent implements OnInit {
   loadedStoriesIds: number[] = [];
-  @Input() loadedStories: any = [];
-  storieId: any;
+  // @Input() loadedStories: any = [];
+  @Input() storyId!: number
+  @Input() index!: number
+  story?: any;
   baseUrl: any;
   error: string = '';
 
-  constructor(private homepageService: HomepageService) {}
+  constructor(private homepageService: HomepageService) { }
 
   // get baseUrl variable from service for http.get
   public get displayBaseUrl(): string {
@@ -21,21 +23,16 @@ export class StoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    return this.homepageService
-      .onFetchTopStoriesIds()
-      .subscribe((response: any) => {
-        response.forEach((storieId: any) => {
-          return this.homepageService.onFetchStory(storieId).subscribe(
-            (responseData) => {
-              // Shallow Copy
-              this.loadedStories = [...this.loadedStories, responseData];
-            },
-            (error: string) => {
-              this.error = error;
-              console.log(error);
-            }
-          );
-        });
-      });
+    this.homepageService.onFetchStory(this.storyId).subscribe(
+      (responseData) => {
+        // Shallow Copy
+        this.story = responseData
+        // this.loadedStories = [...this.loadedStories, responseData];
+      },
+      (error: string) => {
+        this.error = error;
+        console.log(error);
+      }
+    )
   }
 }

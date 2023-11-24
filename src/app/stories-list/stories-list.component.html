@@ -1,1 +1,9 @@
-<app-story [loadedStories]="loadedStories"></app-story>
+<table>
+  <div  *ngFor="let storyId of loadedStoryIds; index as i">
+    <tr *ngIf="i + 1 > firstIndex && i < indexToLoad">
+      <app-story  [storyId]="storyId" [index]="i"></app-story>
+    </tr>
+  </div>
+</table>
+<button type="button" (click)="loadPreviousTen()" [disabled]="firstIndex === 0">Previous page</button>
+<button type="button" (click)="loadTenMore()">Next page</button>
